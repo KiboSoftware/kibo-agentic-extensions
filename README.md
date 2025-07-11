@@ -19,28 +19,37 @@ The core pattern revolves around defining tool logic, input and output schemas i
 
 ### 1. Tool Definition (`src/domains/tools/customSearchTool.js`)
 
-The main tool file defines three essential components:
+The main tool file defines four essential components:
 
-#### Description
-```javascript
-const definition = "Search for products";
-module.exports.description = definition;
-```
-The description tells the LLM what this tool does and when it should be used. Make it clear and specific.
+Description, Input Schema, Output Schema and the javascript to execute.
+In its simplest form, a tool could be defined in a single file such as:
 
-#### Input Schema
 ```javascript
-const inputSchema = searchInputSchema;
-module.exports.inputSchema = inputSchema;
-```
-Defines the expected parameters the LLM should provide when calling this tool. Uses Zod for validation.
+// src/domains/tools/customSearchTool.js
 
-#### Output Schema  
-```javascript
-const outputSchema = searchResultSchema;
-module.exports.outputSchema = outputSchema;
+const z = require('zod').z;
+
+// tool description
+module.exports.description = "Get product name";
+
+// tool input schema
+module.exports.inputSchema = z.object({
+    productCode: z.string().describe("The id of the product"),
+});
+
+// tool output schema
+module.exports.outputSchema = z.object({
+    name: z.string().describe("Product name")
+})
+
+// tool logic executed by AI Agent
+module.exports = function(context, callback) {
+    const toolInputParams = context.get.toolInput();
+    const { productCode } = toolInputParams
+    const result = { name: "Product Name"}
+    callback(null, result)
+}
 ```
-Defines the structure of data the tool will return, allowing the LLM to understand and work with the response.
 
 ### 2. Schema Definitions (`schema.js`)
 
