@@ -17,9 +17,7 @@ The core pattern revolves around defining tool logic, input and output schemas i
 
 ## Key Components
 
-### 1. Tool Definition (`src/domains/tools/customSearchTool.js`)
-
-The main tool file defines four essential components:
+The tool file defines four essential components:
 
 Description, Input Schema, Output Schema and the javascript to execute.
 In its simplest form, a tool could be defined in a single file such as:
@@ -51,12 +49,15 @@ module.exports = function(context, callback) {
 }
 ```
 
-### 2. Schema Definitions (`schema.js`)
+### Code Organization
+Best practice would be to seperate your tools into multiple files.
+
+### 1. Schema Definitions (`schema.js`)
 
 Define your input and output schemas using Zod for robust validation:
 
 ```javascript
-const searchInputSchema = z.object({
+const inputSchema = z.object({
     search_query: z.string()
         .describe("Search Query to lookup products"),
     filter_query: z.string()
@@ -64,12 +65,13 @@ const searchInputSchema = z.object({
         .describe("Filter Query to refine search results"),
 });
 
-const searchResultSchema = z.object({
+const outputSchema = z.object({
     products: z.array(productSchema)
         .describe("List of products matching the search query"),
     facets: z.array(facetItemSchema)
         .describe("List of facets available for filtering search results")
 });
+module.exports = { inputSchema, outputSchema }
 ```
 
 **Key principles:**
@@ -78,25 +80,29 @@ const searchResultSchema = z.object({
 - Mark optional fields with `.optional()`
 - Validate data types and constraints (URLs, min/max lengths, etc.)
 
-### 3. Business Logic Handler (`handler.js`)
+### 2. Business Logic Handler (`handler.js`)
 
 Separate your core business logic into dedicated handler functions:
 
 ```javascript
-async function searchHandler(inputParams) {
+async function handler(inputParams) {
     const { search_query, filter_query } = inputParams;
     // Perform the actual work
     const response = await fetch(/* your API call */);
     const responseData = await response.json();
     return SearchResponse.fromDict(responseData);
 }
+module.exports = { handler }
 ```
 
 ### 4. Tool Execution Pattern
 
-The main tool function follows this pattern:
+The final tool function to put it all together following this pattern:
 
 ```javascript
+const { inputSchema, outputSchema } = require('./schema')
+const { handler } = require('./handler')
+
 module.exports = function (context, callback) {
     var toolInputParams = context.get.toolInput();
     
