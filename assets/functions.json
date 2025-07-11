@@ -1,0 +1,9 @@
+{
+  "exports": [
+    {
+      "id": "bloomReachSearch",
+      "virtualPath": "./dist/agentic.tools.manifest.all.js",
+      "actionId": "embedded.agentic.tools"
+    }
+  ]
+}
