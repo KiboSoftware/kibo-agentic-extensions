@@ -2,7 +2,9 @@
   "name": "ps",
   "version": "0.1.0",
   "scripts": {
-    "test": "grunt test"
+    "build": "grunt build",
+    "watch": "grunt watch",
+    "test": "jest"
   },
   "devDependencies": {
     "grunt": "^1.6.1",
@@ -10,6 +12,7 @@
     "grunt-contrib-jshint": "^3.2.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-mozu-appdev-sync": "^2.4.2",
+    "jest": "^29.7.0",
     "js-yaml": "^4.1.0",
     "load-grunt-tasks": "^5.1.0",
     "mozu-action-helpers": "^0.5.6",

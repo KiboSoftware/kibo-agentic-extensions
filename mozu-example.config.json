@@ -1,0 +1,8 @@
+{
+  "baseUrl": "https://www.usc1.gcp.kibocommerce.com/",
+  "developerAccountId": 0,
+  "developerAccount": {
+    "emailAddress": ""
+  },
+  "workingApplicationKey": "application.key.1.0.0.Release"
+}

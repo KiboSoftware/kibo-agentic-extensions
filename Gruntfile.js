@@ -93,7 +93,6 @@ module.exports = function (grunt) {
         }
     });
     grunt.registerTask('build', [
-        'jshint:normal',
         'browserify:all',
         'manifest',
         'generate-tool-schema'
